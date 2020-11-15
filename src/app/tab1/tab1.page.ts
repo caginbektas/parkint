@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
 import * as L from "leaflet";
 import "leaflet/dist/images/marker-shadow.png";
 import "leaflet/dist/images/marker-icon-2x.png";
@@ -13,7 +14,7 @@ export class Tab1Page {
 
   map: L.Map
 
-  constructor() {}
+  constructor(private geolocation: Geolocation) {}
 
   generateMap(){
     this.map = L.map('map', {
@@ -42,6 +43,19 @@ export class Tab1Page {
     this.map.flyTo(new L.LatLng(40.987579, 29.036931), 40, {
       animate: false
     });
- 
+  }
+  getCurrentLocatin(){
+    this.geolocation.getCurrentPosition().then((resp) => {
+      var marker = L.marker([ resp.coords.latitude, resp.coords.longitude]).addTo(this.map);
+
+      this.map.flyTo(new L.LatLng(resp.coords.latitude, resp.coords.longitude), 30, {
+        animate: false
+      });
+      
+      // resp.coords.latitude
+      // resp.coords.longitude
+     }).catch((error) => {
+       console.log('Error getting location', error);
+     });
   }
 }
