@@ -1,0 +1,7 @@
+{
+  "name": "parkint",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
