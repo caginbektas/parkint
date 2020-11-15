@@ -15,7 +15,7 @@ export class Tab1Page {
 
   constructor() {}
 
-  ngOnInit() {
+  generateMap(){
     this.map = L.map('map', {
       center: [ -42.737669, 147.436224 ],
       zoom: 60,
@@ -32,7 +32,16 @@ export class Tab1Page {
     }, 0);
 
     var marker = L.marker([ -42.737669, 147.436224]).addTo(this.map);
-
   }
 
+  ngOnInit() {
+    this.generateMap();
+  }
+  
+  populateCurrentLocation(){
+    this.map.flyTo(new L.LatLng(40.987579, 29.036931), 40, {
+      animate: false
+    });
+
+  }
 }
