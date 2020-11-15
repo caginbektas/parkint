@@ -37,11 +37,11 @@ export class Tab1Page {
   ngOnInit() {
     this.generateMap();
   }
-  
+
   populateCurrentLocation(){
     this.map.flyTo(new L.LatLng(40.987579, 29.036931), 40, {
       animate: false
     });
-
+ 
   }
 }
