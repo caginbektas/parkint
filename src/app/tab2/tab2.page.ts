@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { Storage } from '@ionic/storage';
+import { ParkHistory } from '../data/ParkHistory';
+const PARK_HISTORY: string = "PARK_HISTORY";
 
 @Component({
   selector: 'app-tab2',
@@ -6,7 +9,14 @@ import { Component } from '@angular/core';
   styleUrls: ['tab2.page.scss']
 })
 export class Tab2Page {
+  parkingHistory: Array<ParkHistory> = [];
 
-  constructor() {}
+  constructor(private storageController: Storage) {}
 
+  ionViewDidEnter(){
+    this.storageController.get(PARK_HISTORY).then((val) => {
+      this.parkingHistory = val
+      console.log(this.parkingHistory)
+    });
+  }
 }

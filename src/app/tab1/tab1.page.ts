@@ -2,25 +2,37 @@ import { Component } from '@angular/core';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { ToastController } from '@ionic/angular';
 import { AlertController } from '@ionic/angular';
+import { Storage } from '@ionic/storage';
+import { DatePipe } from '@angular/common'
 import * as L from "leaflet";
 import "leaflet/dist/images/marker-shadow.png";
 import "leaflet/dist/images/marker-icon-2x.png";
-
+import { ParkHistory } from '../data/ParkHistory';
+const LAST_PARKING: string = "LAST_PARKING";
+const PARK_HISTORY: string = "PARK_HISTORY";
 
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
   styleUrls: ['tab1.page.scss']
 })
+
 export class Tab1Page {
   map: L.Map
   marker: any
   location: L.LatLng
+  parkInfo: ParkHistory = new ParkHistory();
+  parkingHistory: Array<ParkHistory> = [];
   //location: L.LatLng = new L.LatLng(52.101627, 21.952208);
 
-  constructor(private geolocation: Geolocation, private sucukluTost: ToastController, private alertController: AlertController) {}
+  constructor(private geolocation: Geolocation, 
+    private sucukluTost: ToastController, 
+    private alertController: AlertController,
+    private storageController: Storage,
+    private datePipe: DatePipe) {}
 
   ngOnInit() {
+    //this.storage.clear()
     this.getInitialLocation();
     //this.generateMap()
   }
@@ -119,5 +131,49 @@ export class Tab1Page {
     });
 
     await alert.present();
+  }
+
+  async parkNowClick() {
+    let prompt = await this.alertController.create({
+      inputs: [
+        {
+          name: 'note',
+          placeholder: 'Note',
+        }
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          handler: data => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Save',
+          handler: data => {
+            this.parkInfo.id = new Date().getTime();
+            this.parkInfo.note = data.note;
+            this.parkInfo.lat = this.location.lat;
+            this.parkInfo.lng = this.location.lng;
+            let temp = new Date();
+            let date =this.datePipe.transform(temp, 'dd.MM.yyy HH:mm').toString();
+            debugger;
+            this.parkInfo.dateTime = date
+            this.saveParking();
+          }
+        }
+      ]
+    });
+    await prompt.present();
+  }
+  
+  saveParking(){
+    this.storageController.set(LAST_PARKING, this.parkInfo);
+    this.storageController.get(PARK_HISTORY).then((val) => {
+      if(val)
+        this.parkingHistory = val;
+      this.parkingHistory.push(this.parkInfo)
+      this.storageController.set(PARK_HISTORY, this.parkingHistory);
+    });
   }
 }
