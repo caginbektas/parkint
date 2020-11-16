@@ -14,21 +14,20 @@ import "leaflet/dist/images/marker-icon-2x.png";
 })
 export class Tab1Page {
   map: L.Map
-  lat: any =50.041518
-  long: any =14.555797
   marker: any
+  location: L.LatLng
+  //location: L.LatLng = new L.LatLng(52.101627, 21.952208);
 
   constructor(private geolocation: Geolocation, private sucukluTost: ToastController, private alertController: AlertController) {}
 
   ngOnInit() {
-    //this.getInitialLocation();
-    this.generateMap()
+    this.getInitialLocation();
+    //this.generateMap()
   }
 
   getInitialLocation(){
     this.geolocation.getCurrentPosition().then((resp) => {
-      this.lat = resp.coords.latitude;
-      this.long = resp.coords.longitude;
+      this.location = new L.LatLng(resp.coords.latitude, resp.coords.longitude)
       this.presentToast("Location updated", 1000);
       this.generateMap();
      }).catch((error) => {
@@ -38,8 +37,8 @@ export class Tab1Page {
 
   generateMap(){
     this.map = L.map('map', {
-      center: [ this.lat, this.long ],
-      zoom: 60,
+      center: this.location,
+      zoom: 16,
       renderer: L.canvas()
     })
 
@@ -52,15 +51,12 @@ export class Tab1Page {
       this.map.invalidateSize();
     }, 0);
 
-    var marker = L.marker([ -42.737669, 147.436224]).addTo(this.map);
-
-    this.createMarker(this.lat, this.long)
+    this.createMarker(this.location)
   }
 
   updateCurrentLocation(){
     this.geolocation.getCurrentPosition().then((resp) => {
-      this.lat = resp.coords.latitude;
-      this.long = resp.coords.longitude;
+      this.location = new L.LatLng(resp.coords.latitude, resp.coords.longitude)
       this.presentToast("Location updated", 1000);
       this.updateMap();
      }).catch((error) => {
@@ -69,16 +65,16 @@ export class Tab1Page {
   }
 
   updateMap(){
-    this.map.flyTo(new L.LatLng(this.lat, this.long), 30, {
+    this.map.flyTo(this.location, 16, {
       animate: false
     });
-    this.createMarker(this.lat, this.long);
+    this.createMarker(this.location);
   }
 
-  createMarker(lat: any, long: any){
+  createMarker(location: L.LatLng){
     if(this.marker && this.marker != undefined)
       this.deleteMarker();
-     this.marker = L.marker([ lat, long]);
+     this.marker = L.marker([ location.lat, location.lng]);
      this.marker.addTo(this.map);
   }
 
