@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { ToastController } from '@ionic/angular';
 import * as L from "leaflet";
 import "leaflet/dist/images/marker-shadow.png";
 import "leaflet/dist/images/marker-icon-2x.png";
@@ -14,7 +15,7 @@ export class Tab1Page {
 
   map: L.Map
 
-  constructor(private geolocation: Geolocation) {}
+  constructor(private geolocation: Geolocation, private sucukluTost: ToastController) {}
 
   generateMap(){
     this.map = L.map('map', {
@@ -51,11 +52,16 @@ export class Tab1Page {
       this.map.flyTo(new L.LatLng(resp.coords.latitude, resp.coords.longitude), 30, {
         animate: false
       });
-      
-      // resp.coords.latitude
-      // resp.coords.longitude
      }).catch((error) => {
-       console.log('Error getting location', error);
+       console.log('Error getting location');
+       this.presentToast("Error getting location", 2000);
      });
+  }
+  async presentToast(message: string, duration: number) {
+    const toast = await this.sucukluTost.create({
+      message: message,
+      duration: 3000
+    });
+    toast.present();
   }
 }
