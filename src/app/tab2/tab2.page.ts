@@ -21,6 +21,7 @@ export class Tab2Page {
     this.storageController.get(PARK_HISTORY).then((val) => {
       debugger;
       this.parkingHistory = val
+      this.parkingHistory = this.parkingHistory.sort((a, b) => (a.id < b.id) ? 1 : -1)
     });
   }
 
@@ -45,12 +46,6 @@ export class Tab2Page {
   }
 
   navigateLocation(lat: number, lng: number){
-      if (this.platform.is('android')) {
-        this.presentToast("andro", 500)
-        //window.location.href = 'geo:dir//' + lat + "," + lng;
         window.location.href = "https://www.google.com/maps/dir//" + lat + "," + lng + "/@" + lat + "," + lng;
-      } else {
-        window.location.href = 'maps://maps.apple.com/?q=' + lat + "," + lng;
-      }
   }
 }
