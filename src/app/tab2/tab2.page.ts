@@ -25,7 +25,8 @@ export class Tab2Page {
   async presentToast(message: string, duration: number) {
     const toast = await this.sucukluTost.create({
       message: message,
-      duration: duration
+      duration: duration,
+      position: "top"
     });
     toast.present();
   }

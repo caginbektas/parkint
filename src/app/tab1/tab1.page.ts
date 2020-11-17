@@ -101,7 +101,8 @@ export class Tab1Page {
   async presentToast(message: string, duration: number) {
     const toast = await this.sucukluTost.create({
       message: message,
-      duration: 3000
+      duration: duration,
+      position: "top"
     });
     toast.present();
   }
@@ -183,10 +184,10 @@ export class Tab1Page {
     this.http.get<FullAddress>('https://nominatim.openstreetmap.org/reverse?format=jsonv2&'
     +'lat=' + lat + '&lon=' + lng).subscribe((response) => {
       this.parkInfo.address = new Address();
-      this.parkInfo.address.country_code = response.address.country_code != undefined ? response.address.country_code.toUpperCase() : "";
-      this.parkInfo.address.city = response.address.city != undefined ? response.address.city : "";
-      this.parkInfo.address.road = response.address.road != undefined ? response.address.road : "";
-      this.parkInfo.address.house_number = response.address.house_number != undefined ? response.address.house_number : "";
+      this.parkInfo.address.country_code = response && response. address && response.address.country_code ? response.address.country_code.toUpperCase() : "";
+      this.parkInfo.address.city = response && response. address && response.address.city ? response.address.city : "";
+      this.parkInfo.address.road = response && response. address && response.address.road ? response.address.road : "";
+      this.parkInfo.address.house_number = response && response. address && response.address.house_number ? response.address.house_number : "";
 
       this.saveParking();
     });
