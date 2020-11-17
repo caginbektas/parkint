@@ -30,4 +30,15 @@ export class Tab2Page {
     });
     toast.present();
   }
+
+  updateHistory(){
+    this.storageController.set(PARK_HISTORY, this.parkingHistory);
+  }
+
+  removeHistoryItem(id: number){
+    this.parkingHistory = this.parkingHistory.filter(function( obj ) {
+      return obj.id !== id;
+    });
+    this.updateHistory();
+  }
 }
