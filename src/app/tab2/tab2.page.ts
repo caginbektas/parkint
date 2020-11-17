@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { ParkHistory } from '../data/ParkHistory';
 import { ToastController } from '@ionic/angular';
+import { Platform } from '@ionic/angular';
 const PARK_HISTORY: string = "PARK_HISTORY";
 
 @Component({
@@ -13,7 +14,8 @@ export class Tab2Page {
   parkingHistory: Array<ParkHistory> = [];
 
   constructor(private storageController: Storage,
-    private sucukluTost: ToastController) {}
+    private sucukluTost: ToastController,
+    private platform: Platform) {}
 
   ionViewDidEnter(){
     this.storageController.get(PARK_HISTORY).then((val) => {
@@ -40,5 +42,15 @@ export class Tab2Page {
       return obj.id !== id;
     });
     this.updateHistory();
+  }
+
+  navigateLocation(lat: number, lng: number){
+      if (this.platform.is('android')) {
+        this.presentToast("andro", 500)
+        //window.location.href = 'geo:dir//' + lat + "," + lng;
+        window.location.href = "https://www.google.com/maps/dir//" + lat + "," + lng + "/@" + lat + "," + lng;
+      } else {
+        window.location.href = 'maps://maps.apple.com/?q=' + lat + "," + lng;
+      }
   }
 }

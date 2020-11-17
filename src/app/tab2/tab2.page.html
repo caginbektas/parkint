@@ -13,7 +13,7 @@
           <h3>{{ history.address.country_code}} - {{ history.address.city}}</h3>
           <p class="note" (click)=presentToast(history.note,1500)>{{ history.note }}</p>
         </ion-label>
-        <ion-icon class="icon-blue" name="location"></ion-icon>
+        <ion-icon class="icon-blue" name="location" (click)=navigateLocation(history.lat,history.lng)></ion-icon>
         <ion-icon class="icon-red" name="close-circle" (click)=removeHistoryItem(history.id)></ion-icon>
       </ion-item>
   </ion-list>
