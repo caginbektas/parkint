@@ -44,7 +44,6 @@ export class Tab1Page {
   getInitialLocation(){
     this.geolocation.getCurrentPosition().then((resp) => {
       this.location = new L.LatLng(resp.coords.latitude, resp.coords.longitude)
-      this.presentToast("Location updated", 1000);
       this.generateMap();
      }).catch((error) => {
        this.presentToast("Error getting location", 2000);
@@ -68,12 +67,12 @@ export class Tab1Page {
     }, 0);
 
     this.createMarker(this.location)
+    this.presentToast("Map generated", 1000);
   }
 
   updateCurrentLocation(){
     this.geolocation.getCurrentPosition().then((resp) => {
       this.location = new L.LatLng(resp.coords.latitude, resp.coords.longitude)
-      this.presentToast("Location updated", 1000);
       this.updateMap();
      }).catch((error) => {
        this.presentToast("Error getting location", 2000);
@@ -85,6 +84,7 @@ export class Tab1Page {
       animate: false
     });
     this.createMarker(this.location);
+    this.presentToast("Location updated", 1000);
   }
 
   createMarker(location: L.LatLng){
@@ -105,37 +105,6 @@ export class Tab1Page {
       position: "top"
     });
     toast.present();
-  }
-
-  async presentAlertConfirm() {
-    const alert = await this.alertController.create({
-      cssClass: 'my-custom-class',
-      header: 'Select an option',
-      buttons: [
-        {
-          text: 'Improve location',
-          handler: () => {
-            this.presentToast("Location improving...", 1000);
-            this.updateCurrentLocation();
-          }
-        }, 
-        {
-          text: 'Navigate to last parking',
-          handler: () => {
-            this.presentToast("WIP...", 1000);
-          }
-        },
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          cssClass: 'danger',
-          handler: (blah) => {
-          }
-        }
-      ]
-    });
-
-    await alert.present();
   }
 
   async parkNowClick() {
@@ -180,6 +149,7 @@ export class Tab1Page {
       this.storageController.set(PARK_HISTORY, this.parkingHistory);
     });
   }
+
   getFullAddress(lat: number, lng: number){
     this.http.get<FullAddress>('https://nominatim.openstreetmap.org/reverse?format=jsonv2&'
     +'lat=' + lat + '&lon=' + lng).subscribe((response) => {
