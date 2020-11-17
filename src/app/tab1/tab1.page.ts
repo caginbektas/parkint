@@ -4,10 +4,13 @@ import { ToastController } from '@ionic/angular';
 import { AlertController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { DatePipe } from '@angular/common'
+import { HttpClient } from '@angular/common/http';
 import * as L from "leaflet";
 import "leaflet/dist/images/marker-shadow.png";
 import "leaflet/dist/images/marker-icon-2x.png";
 import { ParkHistory } from '../data/ParkHistory';
+import { FullAddress } from '../data/FullAddress';
+import { Address } from '../data/Address';
 const LAST_PARKING: string = "LAST_PARKING";
 const PARK_HISTORY: string = "PARK_HISTORY";
 
@@ -29,10 +32,11 @@ export class Tab1Page {
     private sucukluTost: ToastController, 
     private alertController: AlertController,
     private storageController: Storage,
-    private datePipe: DatePipe) {}
+    private datePipe: DatePipe,
+    private http: HttpClient) {}
 
   ngOnInit() {
-    //this.storage.clear()
+    //this.storageController.clear()
     this.getInitialLocation();
     //this.generateMap()
   }
@@ -157,9 +161,8 @@ export class Tab1Page {
             this.parkInfo.lng = this.location.lng;
             let temp = new Date();
             let date =this.datePipe.transform(temp, 'dd.MM.yyy HH:mm').toString();
-            debugger;
             this.parkInfo.dateTime = date
-            this.saveParking();
+            this.getFullAddress(this.parkInfo.lat, this.parkInfo.lng)
           }
         }
       ]
@@ -174,6 +177,18 @@ export class Tab1Page {
         this.parkingHistory = val;
       this.parkingHistory.push(this.parkInfo)
       this.storageController.set(PARK_HISTORY, this.parkingHistory);
+    });
+  }
+  getFullAddress(lat: number, lng: number){
+    this.http.get<FullAddress>('https://nominatim.openstreetmap.org/reverse?format=jsonv2&'
+    +'lat=' + lat + '&lon=' + lng).subscribe((response) => {
+      this.parkInfo.address = new Address();
+      this.parkInfo.address.country_code = response.address.country_code != undefined ? response.address.country_code.toUpperCase() : "";
+      this.parkInfo.address.city = response.address.city != undefined ? response.address.city : "";
+      this.parkInfo.address.road = response.address.road != undefined ? response.address.road : "";
+      this.parkInfo.address.house_number = response.address.house_number != undefined ? response.address.house_number : "";
+
+      this.saveParking();
     });
   }
 }

@@ -9,8 +9,9 @@
       <ion-item *ngFor="let history of parkingHistory"> 
         <ion-label>
           <h2>{{ history.dateTime }}</h2>
-          <h3>{{ history.address}}</h3>
-          <p>{{ history.note }}</p>
+          <h3>{{ history.address.road}}, {{ history.address.house_number}}</h3>
+          <h3>{{ history.address.country_code}} - {{ history.address.city}}</h3>
+          <p class="note" (click)=presentToast(history.note,1500)>{{ history.note }}</p>
         </ion-label>
         <ion-icon class="icon-blue" name="location"></ion-icon>
         <ion-icon class="icon-red" name="close-circle"></ion-icon>

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { ParkHistory } from '../data/ParkHistory';
+import { ToastController } from '@ionic/angular';
 const PARK_HISTORY: string = "PARK_HISTORY";
 
 @Component({
@@ -11,12 +12,21 @@ const PARK_HISTORY: string = "PARK_HISTORY";
 export class Tab2Page {
   parkingHistory: Array<ParkHistory> = [];
 
-  constructor(private storageController: Storage) {}
+  constructor(private storageController: Storage,
+    private sucukluTost: ToastController) {}
 
   ionViewDidEnter(){
     this.storageController.get(PARK_HISTORY).then((val) => {
+      debugger;
       this.parkingHistory = val
-      console.log(this.parkingHistory)
     });
+  }
+
+  async presentToast(message: string, duration: number) {
+    const toast = await this.sucukluTost.create({
+      message: message,
+      duration: duration
+    });
+    toast.present();
   }
 }

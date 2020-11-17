@@ -1,10 +1,10 @@
-import * as L from "leaflet";
+import { Address } from './Address';
 
 export class ParkHistory{
     id: number;
     lat: number;
     lng: number;
-    address: string = "will be updated later";
+    address: Address;
     note: string;
     dateTime: string;
 }
