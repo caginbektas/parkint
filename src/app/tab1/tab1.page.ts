@@ -109,6 +109,7 @@ export class Tab1Page {
 
   async parkNowClick() {
     let prompt = await this.alertController.create({
+      message: "Add a note (optional)",
       inputs: [
         {
           name: 'note',
