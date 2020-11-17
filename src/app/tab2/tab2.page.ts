@@ -3,6 +3,7 @@ import { Storage } from '@ionic/storage';
 import { ParkHistory } from '../data/ParkHistory';
 import { ToastController } from '@ionic/angular';
 import { Platform } from '@ionic/angular';
+import { AlertController } from '@ionic/angular';
 const PARK_HISTORY: string = "PARK_HISTORY";
 
 @Component({
@@ -15,7 +16,8 @@ export class Tab2Page {
 
   constructor(private storageController: Storage,
     private sucukluTost: ToastController,
-    private platform: Platform) {}
+    private platform: Platform,
+    private alertController: AlertController) {}
 
   ionViewDidEnter(){
     this.storageController.get(PARK_HISTORY).then((val) => {
@@ -32,6 +34,29 @@ export class Tab2Page {
       position: "top"
     });
     toast.present();
+  }
+
+  async removeHistoryDialog(id: number){
+    const alert = await this.alertController.create({
+      header: 'Deleting the parking history can not be undone',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Okay',
+          handler: () => {
+            this.removeHistoryItem(id);
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 
   updateHistory(){
