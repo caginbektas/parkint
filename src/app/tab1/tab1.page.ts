@@ -134,6 +134,7 @@ export class Tab1Page {
             let date =this.datePipe.transform(temp, 'dd.MM.yyy HH:mm').toString();
             this.parkInfo.dateTime = date
             this.getFullAddress(this.parkInfo.lat, this.parkInfo.lng)
+            this.presentToast("Park location created!", 1000);
           }
         }
       ]

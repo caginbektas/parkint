@@ -68,6 +68,7 @@ export class Tab2Page {
       return obj.id !== id;
     });
     this.updateHistory();
+    this.presentToast("Parking location deleted", 1000);
   }
 
   navigateLocation(lat: number, lng: number){
