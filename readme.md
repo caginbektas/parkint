@@ -1,7 +1,7 @@
 # Parkint - Parking Point
 
-Parkint, helps you the keep your favorite or tricky parking places saved. You can easily navigate to the parking points using the history tab.
-No registration is needed. No personal information is needed. Also, your data (including the sensetive location information) is storing just in your own device. Not any single bit of data is uploading to anywhere online. Your privacy is yourself!
+Parkint, helps you to keep your favorite or tricky parking places saved. You can easily navigate to the parking points using the history tab.
+No registration is needed. No personal information is needed. Also, your data (including the sensetive location information) is storing just in your own device. Not any single bit of data is being uploaded to anywhere online. Your privacy is yourself!
 
 ![App1](https://github.com/caginbektas/parkint/blob/prod/readme1.gif) ![App1](https://github.com/caginbektas/parkint/blob/prod/readme2.gif)
 
